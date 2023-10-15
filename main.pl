@@ -1,4 +1,5 @@
 :- consult('filtro.pl').
+:- use_module(library(http/json)).
 :- initialization(init).
 
 lyricsLab :-
@@ -109,8 +110,12 @@ splitBandasAnteriores('0', []).
 splitBandasAnteriores(StringBandas, Retorno) :-
   split_string(StringBandas, ",", " ", Retorno).
 
-
 init :-
+/*
+  open('artistas.txt', read, Stream),  % Abra o arquivo para leitura
+  read(Stream, Artistas),  % Leia a matriz do arquivo
+  close(Stream),
+  assertz(artista(Artistas)).  % Feche o arquivo
   assertz(artista([['teste1', 'teste1', ['teste1', 'teste1'], 'teste1'], ['teste2', 'teste2', ['teste2', 'teste2'], 'teste2']])),
   adicionarArtista([['John Lennon', 'The Beatles', ['The Quarrymen'], 'Vocalista']]),
   adicionarArtista([['Paul McCartney', 'The Beatles', ['The Quarrymen'], 'Baixista']]),
@@ -218,7 +223,11 @@ init :-
   adicionarArtista([['Jerry Shirley', 'Humble Pie', [], 'Baterista']]),
   adicionarArtista([['Freddy Mercury', 'Queen', [], 'Vocalista']]),
   adicionarArtista([['Brian May', 'Queen', [], 'Guitarrista']]),
+  artista(Artistas),
+  open('artistas.txt', write, Stream),
+  write(Stream, Artistas),
+  close(Stream),
   writeln("******************"),
   writeln('Dados carregados'),
   writeln("******************"),
-  lyricsLab.
+  lyricsLab.*/
