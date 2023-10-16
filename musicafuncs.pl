@@ -21,7 +21,15 @@ selecionaMusica(Id, R) :-
  musica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao),R = musica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao).
 
 
+deletaMusica(Id):- 
+ selecionaMusica(Id, Musica),
+ retract(Musica),
+ salvarMusicas.
 
+
+atualizaMusica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, Banda, Avaliacao):-
+ deletaMusica(Id),
+ adicionaMusica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, Banda, Avaliacao).
 
 
 
@@ -45,4 +53,4 @@ printarMusicas :-
 
 
 
- %adicionaMusica("Nome2", ["Instrumentos"], ["Participantes"], "Rimo", "32", "Letra", "NomeBanda", 3).
+ %adicionaMusica('Nome3', ['Instrumentos1'], ['Participantes1'], 'Rimo1', '32', 'Letra', 'NomeBanda', 4).
