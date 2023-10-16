@@ -1,6 +1,8 @@
-:- consult('filtro.pl').
+:- consult('/home/CaioJhonatan/PLP/LyricsLabHaskellComProlog/LyricsLabProlog/artistasFiltro.pl'). %Por algum motivo meu diretorio relativo do swi não funciona.
+:- consult('/home/CaioJhonatan/PLP/LyricsLabHaskellComProlog/LyricsLabProlog/musicafuncs.pl').
 :- use_module(library(http/json)).
-:- initialization(init).
+:-initialization(lyricsLab).
+
 
 lyricsLab :-
   writeln('\n================='),
@@ -26,6 +28,16 @@ menu2('1') :-
   read(Opcao),
   upperCase(Opcao, OpcaoUpper),
   opcaoArtista(OpcaoUpper).
+menu2('3') :- 
+  writeln('\n================='),
+  writeln('1. Adicionar uma nova musica'),
+  writeln('2. Buscar Musica por Id.'),
+  writeln('0. Voltar'),
+  writeln('=================\n'),
+  read(Opcao),
+  upperCase(Opcao, OpcaoGrande),
+  opcaoMusica(OpcaoGrande).
+
 menu2('0') :- halt.
 menu2(_) :- writeln('Opcao invalida'), sleep(2).
 
@@ -66,6 +78,10 @@ opcaoArtista('5') :-
   buscarArtistasPorFuncao(Funcao).
 opcaoArtista('0') :- lyricsLab.
 opcaoArtista(_):- writeln('Opcao invalida'), sleep(2), menu2('1').
+
+
+
+
 
 adicionarArtista(DadosDoNovoArtista):- 
   artista(Artistas),
@@ -110,7 +126,55 @@ splitBandasAnteriores('0', []).
 splitBandasAnteriores(StringBandas, Retorno) :-
   split_string(StringBandas, ",", " ", Retorno).
 
-init :-
+
+
+
+%AREA MUSICAS.
+opacaoMusica(_):- writeln("Opcao invalida").
+
+opcaoMusica('1'):- %Menu musica
+  writeln('\n================='),
+  writeln("Digite o nome da musica: "),
+  read(Nome),
+  writeln('\n================='),
+  writeln('Digite os instrumentos (Separados por espaco): '),
+  read(Instrumentos),
+  writeln('\n================='),
+  writeln('Digite os participantes (Separados por espaco): '),
+  read(Participantes),
+  writeln('\n================='),
+  writeln('Digite o ritmo: '),
+  read(Ritmo),
+  writeln('\n================='),
+  writeln('Digite a data de lancamento: '),
+  read(DataLancamento),
+  writeln('\n================='),
+  writeln('Digite a letra dela: '),
+  read(Letra),
+  writeln('\n================='),
+  write("Digite o nome da banda: "),
+  read(NomeBanda),
+  writeln('\n================='),
+  write('Digite a avaliacao dela: '),
+  read(Avaliacao),
+  split_string(Instrumentos, ' ', ' ', InstrumentoSplitado),
+  split_string(Participantes, ' ', ' ', ParticipantesSplitado),
+  adicionaMusica(Nome, InstrumentoSplitado, ParticipantesSplitado, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao).
+
+opcaoMusica('2'):-
+  writeln('\n================='),
+  writeln('Digite o Id da musica: '),
+  read(Id),
+  selecionaMusica(Id, Resultado),
+  writeln(Resultado),
+  sleep(5).
+
+
+
+
+
+
+init.
 /*
   open('artistas.txt', read, Stream),  % Abra o arquivo para leitura
   read(Stream, Artistas),  % Leia a matriz do arquivo
@@ -231,3 +295,6 @@ init :-
   writeln('Dados carregados'),
   writeln("******************"),
   lyricsLab.*/
+
+
+

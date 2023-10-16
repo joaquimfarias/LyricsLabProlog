@@ -3,11 +3,11 @@
 :-initialization(carregaMusicas).
 
 carregaMusicas :- 
-    consult('musicas.pl').
+    consult('/home/CaioJhonatan/PLP/LyricsLabHaskellComProlog/LyricsLabProlog/musicas.pl').
 
 
 salvarMusicas :-
-    open('musicas.pl', write, Stream),
+    open('/home/CaioJhonatan/PLP/LyricsLabHaskellComProlog/LyricsLabProlog/musicas.pl', write, Stream),
     forall(musica(Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao),
            format(Stream, 'musica(~q, ~q, ~q, ~q, ~q, ~q, ~q, ~q).~n', 
                   [Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao])),
@@ -21,7 +21,15 @@ selecionaMusica(Id, R) :-
  musica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao),R = musica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao).
 
 
+deletaMusica(Id):- 
+ selecionaMusica(Id, Musica),
+ retract(Musica),
+ salvarMusicas.
 
+
+atualizaMusica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, Banda, Avaliacao):-
+ deletaMusica(Id),
+ adicionaMusica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, Banda, Avaliacao).
 
 
 
@@ -45,4 +53,4 @@ printarMusicas :-
 
 
 
- %adicionaMusica("Nome2", ["Instrumentos"], ["Participantes"], "Rimo", "32", "Letra", "NomeBanda", 3).
+ %adicionaMusica('Nome3', ['Instrumentos1'], ['Participantes1'], 'Rimo1', '32', 'Letra', 'NomeBanda', 4).
