@@ -1,22 +1,44 @@
+:- consult('artistas.pl').
+:- dynamic (artista/4).
+
+
 buscarArtistaPorNome(NomeParaFiltrar) :-
-  artista(Artistas),
-  filtrarPor(NomeParaFiltrar, 0, Artistas, [], ArtistasFiltrados),
-  toScreen(ArtistasFiltrados, 1).
+  findall([NomeParaFiltrar, BandaAtual, BandasAnteriores, Funcao],
+          artista(NomeParaFiltrar, BandaAtual, BandasAnteriores, Funcao),
+          ArtistasFiltrados),
+          length(ArtistasFiltrados, Len),
+  toScreen(ArtistasFiltrados, 1, Len).
 
 buscarArtistasPorBandaAtual(BandaParaFiltrar) :-
-  artista(Artistas),
-  filtrarPor(BandaParaFiltrar, 1, Artistas, [], ArtistasFiltrados),
-  toScreen(ArtistasFiltrados, 1).
+  findall([Nome, BandaParaFiltrar, BandasAnteriores, Funcao],
+          artista(Nome, BandaParaFiltrar, BandasAnteriores, Funcao),
+          ArtistasFiltrados),
+  length(ArtistasFiltrados, Len),
+  toScreen(ArtistasFiltrados, 1, Len).
 
+buscarArtistasPorBandaAnterior('') :-
+  write("entrou 1"),
+  findall([Nome, BandaAtual, [], Funcao],
+          artista(Nome, BandaAtual, [], Funcao),
+          ArtistasFiltrados),
+          length(ArtistasFiltrados, Len),
+  toScreen(ArtistasFiltrados, 1, Len).
 buscarArtistasPorBandaAnterior(BandaAnteriorParaFiltrar) :-
-  artista(Artistas),
-  filtrarPor(BandaAnteriorParaFiltrar, 2, Artistas, [], ArtistasFiltrados),
-  toScreen(ArtistasFiltrados, 1).
+  BandaAnteriorParaFiltrar \= '',
+  write("entrou 2"),
+  findall([Nome, BandaAtual, BandasAnteriores, Funcao],
+          (artista(Nome, BandaAtual, BandasAnteriores, Funcao),
+          member(BandaAnteriorParaFiltrar, BandasAnteriores)),
+          ArtistasFiltrados),
+  length(ArtistasFiltrados, Len),
+  toScreen(ArtistasFiltrados, 1, Len).
 
 buscarArtistasPorFuncao(FuncaoParaFiltrar) :-
-  artista(Artistas),
-  filtrarPor(FuncaoParaFiltrar, 3, Artistas, [], ArtistasFiltrados),
-  toScreen(ArtistasFiltrados, 1).
+  findall([Nome, BandaAtual, BandasAnteriores, FuncaoParaFiltrar],
+          artista(Nome, BandaAtual, BandasAnteriores, FuncaoParaFiltrar),
+          ArtistasFiltrados),
+          length(ArtistasFiltrados, Len),
+  toScreen(ArtistasFiltrados, 1, Len).
 
 filtrarPor(_, _, [], ListaResultado, ListaResultado):- !.
 filtrarPor(ParametroDeFiltro, 2, [H|T], ListaResultado, Retorno) :-
