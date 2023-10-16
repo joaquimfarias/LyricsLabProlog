@@ -1,21 +1,28 @@
 :- consult('artistas.pl').
 :- dynamic (artista/4).
 
+lenArtistas(X) :-
+  findall([Nome, BandaAtual, BandasAnteriores, Funcao, _],
+          artista(Nome, BandaAtual, BandasAnteriores, Funcao, _),
+          TodosOsArtistas),
+  length(TodosOsArtistas, X).
 
 buscarArtistaPorNome(NomeParaFiltrar) :-
   upcase_atom(NomeParaFiltrar, NomeParaFiltrarUpCase),
-  findall([Nome, BandaAtual, BandasAnteriores, Funcao],
-          (artista(Nome, BandaAtual, BandasAnteriores, Funcao),
+  findall([Nome, BandaAtual, BandasAnteriores, Funcao, _],
+          (artista(Nome, BandaAtual, BandasAnteriores, Funcao, _),
           upcase_atom(Nome, NomeUpCase),
           NomeUpCase == NomeParaFiltrarUpCase),
           ArtistasFiltrados),
           length(ArtistasFiltrados, Len),
+  writeln(ArtistasFiltrados),
+  writeln(NomeParaFiltrar),
   toScreen(ArtistasFiltrados, 1, Len).
 
 buscarArtistasPorBandaAtual(BandaParaFiltrar) :-
   upcase_atom(BandaParaFiltrar, BandaParaFiltrarUpCase),
-  findall([Nome, BandaAtual, BandasAnteriores, Funcao],
-          (artista(Nome, BandaAtual, BandasAnteriores, Funcao),
+  findall([Nome, BandaAtual, BandasAnteriores, Funcao, _],
+          (artista(Nome, BandaAtual, BandasAnteriores, Funcao, _),
           upcase_atom(BandaAtual, BandaAtualUpCase),
           BandaParaFiltrarUpCase == BandaAtualUpCase),
           ArtistasFiltrados),
@@ -23,15 +30,15 @@ buscarArtistasPorBandaAtual(BandaParaFiltrar) :-
   toScreen(ArtistasFiltrados, 1, Len).
 
 buscarArtistasPorBandaAnterior('') :-
-  findall([Nome, BandaAtual, [], Funcao],
-          artista(Nome, BandaAtual, [], Funcao),
+  findall([Nome, BandaAtual, [], Funcao, _],
+          artista(Nome, BandaAtual, [], Funcao, _),
           ArtistasFiltrados),
           length(ArtistasFiltrados, Len),
   toScreen(ArtistasFiltrados, 1, Len).
 buscarArtistasPorBandaAnterior(BandaAnteriorParaFiltrar) :-
   BandaAnteriorParaFiltrar \= '',
-  findall([Nome, BandaAtual, BandasAnteriores, Funcao],
-          (artista(Nome, BandaAtual, BandasAnteriores, Funcao),
+  findall([Nome, BandaAtual, BandasAnteriores, Funcao, _],
+          (artista(Nome, BandaAtual, BandasAnteriores, Funcao, _),
           upcase_atom(BandaAnteriorParaFiltrar, BandaAnteriorParaFiltrarUpCase),
           contem(BandaAnteriorParaFiltrarUpCase, BandasAnteriores)),
           ArtistasFiltrados),
@@ -40,13 +47,22 @@ buscarArtistasPorBandaAnterior(BandaAnteriorParaFiltrar) :-
 
 buscarArtistasPorFuncao(FuncaoParaFiltrar) :-
   upcase_atom(FuncaoParaFiltrar, FuncaoParaFiltrarUpCase),
-  findall([Nome, BandaAtual, BandasAnteriores, Funcao],
-          (artista(Nome, BandaAtual, BandasAnteriores, Funcao),
+  findall([Nome, BandaAtual, BandasAnteriores, Funcao, _],
+          (artista(Nome, BandaAtual, BandasAnteriores, Funcao, _),
           upcase_atom(Funcao, FuncaoUpCase),
           FuncaoParaFiltrarUpCase == FuncaoUpCase),
           ArtistasFiltrados),
           length(ArtistasFiltrados, Len),
   toScreen(ArtistasFiltrados, 1, Len).
+
+setArtista(Nome, BandaAtual, ListaBandasAnteriores, Funcao):-
+  open('artistas.pl', append, Stream),
+  lenArtistas(X),
+  Id is X + 1,
+  assertz(artista(Nome, BandaAtual, ListaBandasAnteriores, Funcao, Id)),
+  format(string(Modelo), 'artista(\"~q\", \"~q\", ~q, \"~q\", ~q).~n', [Nome, BandaAtual, ListaBandasAnteriores, Funcao, Id]),
+  write(Stream, Modelo),
+  close(Stream).
 
 upperCase(String, Uppercase) :-
   atom_string(Atom, String),

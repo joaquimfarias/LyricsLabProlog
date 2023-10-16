@@ -1,5 +1,5 @@
-:- consult('artistasFiltro.pl'), consult('artistas.pl'), consult('musicafuncs.pl').
-:- dynamic (artista/4).
+:- consult('artistasRepo.pl'), consult('artistas.pl'), consult('musicafuncs.pl').
+:- dynamic (artista/5).
 :- use_module(library(http/json)).
 :- initialization(lyricsLab).
 
@@ -54,8 +54,8 @@ opcaoArtista('1') :-
   splitBandasAnteriores(BandasAnterioresString, ListaBandasAnteriores),
   write(' - Funcao na banda atual: '),
   read(Funcao),
-  adicionarArtista(Nome, BandaAtual, ListaBandasAnteriores, Funcao),
-  writeln('Artista adicionado com sucesso!\n'),
+  setArtista(Nome, BandaAtual, ListaBandasAnteriores, Funcao),
+  writeln('\nArtista adicionado com sucesso!\n'),
   sleep(2),
   buscarArtistaPorNome(Nome).
 opcaoArtista('2') :-
@@ -80,13 +80,6 @@ opcaoArtista('5') :-
   buscarArtistasPorFuncao(Funcao).
 opcaoArtista('0') :- lyricsLab.
 opcaoArtista(_):- writeln('Opcao invalida $$$'), sleep(2), menu2('1').
-
-adicionarArtista(Nome, BandaAtual, ListaBandasAnteriores, Funcao):-
-  assertz(artista(Nome, BandaAtual, ListaBandasAnteriores, Funcao)),
-  open('artistas.pl', append, Stream),
-  format(string(Modelo), 'artista(\'~q\', \'~q\', ~q, \'~q\').~n', [Nome, BandaAtual, ListaBandasAnteriores, Funcao]),
-  write(Stream, Modelo),
-  close(Stream).
 
 toScreen([], _, _):- writeln('\nNenhum artista para mostrar.\n'), sleep(3).
 toScreen([H|[]], Indice, Len):- write(Indice), artistaToString(H), Time is 2/Len, sleep(Time), !.
