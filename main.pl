@@ -41,6 +41,8 @@ menu2('3') :-
 menu2('0') :- halt.
 menu2(_) :- writeln('Opcao invalida'), sleep(2).
 
+
+% Area Artistas
 opcaoArtista('1') :-
   writeln('\n================='),
   write(' - Nome do artista: '),

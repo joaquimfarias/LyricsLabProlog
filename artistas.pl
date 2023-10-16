@@ -104,3 +104,4 @@ artista('Greg Ridley', 'Humble Pie', ['Spooky Tooth'], 'Baixista').
 artista('Jerry Shirley', 'Humble Pie', [], 'Baterista').
 artista('Freddy Mercury', 'Queen', [], 'Vocalista').
 artista('Brian May', 'Queen', [], 'Guitarrista').
+artista(''Michael Jackson'', ''Solo'', ["The Jackson 5"], ''Vocalista'').
