@@ -60,7 +60,7 @@ setArtista(Nome, BandaAtual, ListaBandasAnteriores, Funcao):-
   lenArtistas(X),
   Id is X + 1,
   assertz(artista(Nome, BandaAtual, ListaBandasAnteriores, Funcao, Id)),
-  format(string(Modelo), 'artista(\"~q\", \"~q\", ~q, \"~q\", ~q).~n', [Nome, BandaAtual, ListaBandasAnteriores, Funcao, Id]),
+  format(string(Modelo), 'artista(\"~q\", \"~q\", ~q, ~q, ~q).~n', [Nome, BandaAtual, ListaBandasAnteriores, Funcao, Id]),
   write(Stream, Modelo),
   close(Stream).
 
