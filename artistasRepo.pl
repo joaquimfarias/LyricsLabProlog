@@ -45,12 +45,11 @@ buscarArtistasPorBandaAnterior(BandaAnteriorParaFiltrar) :-
   length(ArtistasFiltrados, Len),
   toScreen(ArtistasFiltrados, 1, Len).
 
-buscarArtistasPorFuncao(FuncaoParaFiltrar) :-
+buscarArtistasPorFuncao(FuncoesParaFiltrar) :-
   upcase_atom(FuncoesParaFiltrar, FuncoesParaFiltrarUpCase),
   findall([Nome, BandaAtual, BandasAnteriores, Funcoes, _],
           (artista(Nome, BandaAtual, BandasAnteriores, Funcoes, _),
-          upcase_atom(Funcoes, FuncoesUpCase),
-          contem(FuncoesParaFiltrarUpCase, FuncoesUpCase)),
+          contem(FuncoesParaFiltrarUpCase, Funcoes)),
           ArtistasFiltrados),
           length(ArtistasFiltrados, Len),
   toScreen(ArtistasFiltrados, 1, Len).

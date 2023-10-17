@@ -1,6 +1,7 @@
-musica('Pizza hipotetica', ["TecladoFeio"], ["Meiaum","Felps"], hipotetico, faztempo, 'A pizza hipotetica, a piza hipotetica, ele morreu :(', twitch, 5).
-musica('Cachorrao', ["Coleira","Osso"], ["Pitbull","Rottweiller"], 'Cachorrada', '12-12-12', 'Au AU AU Au AU AU', 'Dogoes', 4).
-musica('Nome3', ['Instrumentos1'], ['Participantes1'], 'Rimo1', '32', 'Letra', 'NomeBanda', 4).
-musica('Música A', ['Guitarra','Baixo','Bateria'], ['João','Maria'], 'Rock', '2022/10/12', 'Letra da música A.', 'Banda X', 8).
-musica('Música B', ['Piano','Vocal','Violino'], ['Carlos','Ana','Marta'], 'Classical', '2021/06/30', 'Letra da música B.', 'Banda Y', 9).
-musica('Música C', ['Saxofone','Flauta','Bateria'], ['Lucas','Laura','Paulo'], 'Jazz', '2020/02/15', 'Letra da música C.', 'Banda Z', 7).
+musica('Música Solo Zerada', ['Violao'], ['AristaSoloZerado'], 'Pop', 'N/A', 'Musica solo que nao tem avaliacao', 'Solo', 0).
+musica('Música Solo Segundo Lugar', ['Piano'], ['ArtistaSoloSegundoLugar'], 'Classico', '2000/02/15', 'Musica solo que esta em segundo lugar em avaliacao total', 'Solo', 9).
+musica('Música 1', ['Guitarra','Bateria','Teclado', 'Mixer'], ['Artista 1', 'Artista 2', 'Artista 3', 'Artista 4'], 'Pop Rock', '2020/02/15', 'Letra Generica 1 terceiro lugar', 'Numero', 7).
+musica('Música 2', ['Guitarra','Bateria','Teclado', 'Mixer'], ['Artista 1', 'Artista 2', 'Artista 3', 'Artista 4'], 'Pop Rock', '2020/02/15', 'Letra Generica 2 terceiro lugar', 'Numero', 6).
+musica('Música 1', ['Guitarra','Bateria','Teclado', 'Mixer'], ['Artista 1', 'Artista 2', 'Artista 3', 'Artista 4'], 'Pop Rock', '2020/02/15', 'Letra Generica 3 terceiro lugar', 'Numero', 8).
+musica('Música a', ['Bateria','Baixo'], ['Artista a','Artista b','Artista c'], 'Jazz', '2020/02/15', 'Letra da música a quarto lugar.', 'Letra', 5).
+musica('Música b', ['Baixo', 'Bateria'], ['Artista a','Artista b','Artista c'], 'Folk', '2020/02/15', 'Letra da música b quarto lugar.', 'Letra', 5).
