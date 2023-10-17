@@ -71,3 +71,12 @@ upperCase(String, Uppercase) :-
 contem(_, []):- false.
 contem(Alvo, [H|_]):- upperCase(Alvo, AlvoUpper), upperCase(H, UpperH), AlvoUpper == UpperH.
 contem(Alvo, [_|T]):- contem(Alvo, T). 
+
+naoContemArtista(NomeParaFiltrar):-
+  upcase_atom(NomeParaFiltrar, NomeParaFiltrarUpCase),
+  findall([Nome, BandaAtual, BandasAnteriores, Funcao, _],
+          (artista(Nome, BandaAtual, BandasAnteriores, Funcao, _),
+          upcase_atom(Nome, NomeUpCase),
+          NomeUpCase == NomeParaFiltrarUpCase),
+          ArtistasFiltrados),
+  length(ArtistasFiltrados, 0).

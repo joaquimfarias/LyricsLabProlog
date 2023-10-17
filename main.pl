@@ -48,7 +48,7 @@ opcaoArtista('1') :-
   write(' - Nome do artista'),
   read(Nome),
   naoContemArtista(Nome),
-  writeln()
+  writeln(),
   write(' - Banda atual'),
   read(BandaAtual),
   write(' - Lista de bandas anteriores (separe com virgula e espaco ", " ou vazio caso nao tenha)'),
@@ -60,7 +60,8 @@ opcaoArtista('1') :-
   setArtista(Nome, BandaAtual, ListaBandasAnteriores, ListaDeFuncoes),
   writeln('\nArtista adicionado com sucesso!\n'),
   sleep(2),
-  buscarArtistaPorNome(Nome).
+  buscarArtistaPorNome(Nome), !.
+opcaoArtista('1') :- writeln('\nEsse nome existe na lista de artistas cadastrados!\n'), sleep(2).
 opcaoArtista('2') :-
   writeln('\n================='),
   write(' - Nome do artista (serao apresentados todos os artistas de mesmo nome)'),
@@ -82,7 +83,7 @@ opcaoArtista('5') :-
   read(Funcao),
   buscarArtistasPorFuncao(Funcao).
 opcaoArtista('0') :- lyricsLab.
-opcaoArtista(_):- writeln('Opcao invalida $$$'), sleep(2), menu2('1').
+opcaoArtista(_):- writeln('Opcao invalida'), sleep(2), menu2('1').
 
 toScreen([], _, _):- writeln('\nNenhum artista para mostrar.\n'), sleep(3).
 toScreen([H|[]], Indice, Len):- write(Indice), artistaToString(H), Time is 2/Len, sleep(Time), !.
