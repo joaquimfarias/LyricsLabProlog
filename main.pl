@@ -19,10 +19,12 @@ lyricsLab :-
 menu2('1') :- 
   writeln('\n================='),
   writeln('1. Adicionar um novo artista'),
-  writeln('2. Buscar artistas pelo NOME'),
-  writeln('3. Buscar artistas pela BANDA ATUAL'),
-  writeln('4. Buscar artistas por uma das BANDAS ANTERIORES'),
-  writeln('5. Buscar artistas por FUNCAO NA BANDA'),
+  writeln('2. Buscar pelo NOME'),
+  writeln('3. Buscar pela BANDA ATUAL'),
+  writeln('4. Buscar por uma das BANDAS ANTERIORES'),
+  writeln('5. Buscar por FUNCAO NA BANDA'),
+  writeln('6. Remover banda atual'),
+  writeln('7. Alterar banda atual'),
   writeln('0. Voltar'),
   writeln('=================\n'),
   read(Opcao),
@@ -48,7 +50,6 @@ opcaoArtista('1') :-
   write(' - Nome do artista'),
   read(Nome),
   naoContemArtista(Nome),
-  writeln(),
   write(' - Banda atual'),
   read(BandaAtual),
   write(' - Lista de bandas anteriores (separe com virgula e espaco ", " ou vazio caso nao tenha)'),
@@ -62,26 +63,58 @@ opcaoArtista('1') :-
   sleep(2),
   buscarArtistaPorNome(Nome), !.
 opcaoArtista('1') :- writeln('\nEsse nome existe na lista de artistas cadastrados!\n'), sleep(2).
+
 opcaoArtista('2') :-
   writeln('\n================='),
   write(' - Nome do artista (serao apresentados todos os artistas de mesmo nome)'),
   read(Nome),
   buscarArtistaPorNome(Nome).
+
 opcaoArtista('3') :-
   writeln('\n================='),
   write(' - Nome da banda atual do artista'),
   read(BandaAtual),
   buscarArtistasPorBandaAtual(BandaAtual).
+
 opcaoArtista('4') :-
   writeln('\n================='),
   write(' - Nome de uma das bandas anteriores do artista'),
   read(BandaAnterior),
   buscarArtistasPorBandaAnterior(BandaAnterior).
+
 opcaoArtista('5') :-
   writeln('\n================='),
   write(' - Funcao do artista'),
   read(Funcao),
   buscarArtistasPorFuncao(Funcao).
+
+opcaoArtista('6') :-
+  writeln('\n================='),
+  write(' - ID do artista'),
+  read(Id),
+  write(' - Nome do artista'),
+  read(Nome),
+  artistaValido(Id, Nome),
+  removerBandaAtual(Id),
+  writeln('\nBanda removida com sucesso!\n'),
+  sleep(2),
+  buscarArtistaPorNome(Nome).
+opcaoArtista('6'):- writeln('\nErro ao tentar alterar a banda do artista\nVerifique se o artista consta em sistema ou se o nome ou o codigo de identificacao estao corretos.\n'), sleep(3), menu2('1').
+
+opcaoArtista('7'):- 
+  writeln('\n================='),
+  write(' - ID do artista'),
+  read(Id),
+  write(' - Nome do artista'),
+  read(Nome),
+  artistaValido(Id, Nome),
+  write(' - Nome da nova banda atual'),
+  read(NovaBandaAtual),
+  atualizarBandaAtual(Id, NovaBandaAtual),
+  writeln('\nBanda atualizada com sucesso!\n'),
+  sleep(2),
+  buscarArtistaPorNome(Nome).
+
 opcaoArtista('0') :- lyricsLab.
 opcaoArtista(_):- writeln('Opcao invalida'), sleep(2), menu2('1').
 
