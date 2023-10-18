@@ -53,15 +53,16 @@ buscarArtistasPorFuncao(FuncoesParaFiltrar) :-
   toScreen(ArtistasFiltrados, 1, Len).
 
 setArtista(Nome, BandaAtual, ListaBandasAnteriores, Funcoes):-
-  writeln('entrou'),
   open('artistas.pl', append, Stream),
   lenArtistas(X),
   Id is X + 1,
   assertz(artista(Nome, BandaAtual, ListaBandasAnteriores, Funcoes, Id)),
-  format(string(Modelo), 'artista(\"~q\", \"~q\", ~q, ~q, ~q).~n', [Nome, BandaAtual, ListaBandasAnteriores, Funcoes, Id]),
+  format(string(Modelo), 'artista(~q, ~q, ~q, ~q, ~q).~n', [Nome, BandaAtual, ListaBandasAnteriores, Funcoes, Id]),
   writeln(Modelo),
   write(Stream, Modelo),
-  close(Stream).
+  close(Stream),
+  write(Id),
+  writeln(' e o Id do artista cadastrado. Ele e unico e extremamente importante para alteracoes futuras.').
 
 artistaValido(Id, Nome) :- 
   artista(ANome, _, _, _, Id),
@@ -71,10 +72,10 @@ artistaValido(Id, Nome) :-
 
 removerBandaAtual(Id) :-
   artista(Nome, BandaAtual, BandasAnteriores, Funcoes, Id),
-  BandaAtual \= '',
+  BandaAtual \= "",
   append([BandaAtual], BandasAnteriores, NovaBandasAnteriores),
   retract(artista(_, _, _, _, Id)),
-  assertz(artista(Nome, '', NovaBandasAnteriores, Funcoes, Id)),
+  assertz(artista(Nome, "", NovaBandasAnteriores, Funcoes, Id)),
   open('artistas.pl', write, Exclude),
   close(Exclude),
   open('artistas.pl', append, Stream),
@@ -85,7 +86,7 @@ removerBandaAtual(_).
 
 atualizarBandaAtual(Id, NovaBandaAtual):-
   artista(Nome, BandaAtual, BandasAnteriores, Funcoes, Id),
-  BandaAtual \= '',
+  BandaAtual \= "",
   append([BandaAtual], BandasAnteriores, NovaBandasAnteriores),
   retract(artista(_, _, _, _, Id)),
   assertz(artista(Nome, NovaBandaAtual, NovaBandasAnteriores, Funcoes, Id)),

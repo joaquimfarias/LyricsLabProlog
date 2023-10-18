@@ -48,10 +48,12 @@ menu2(_) :- writeln('Opcao invalida'), sleep(2).
 opcaoArtista('1') :-
   writeln('\n================='),
   write(' - Nome do artista'),
-  read(Nome),
+  read(Input),
+  atom_string(Input, Nome),
   naoContemArtista(Nome),
   write(' - Banda atual'),
-  read(BandaAtual),
+  read(Input2),
+  atom_string(Input2, BandaAtual),
   write(' - Lista de bandas anteriores (separe com virgula e espaco ", " ou vazio caso nao tenha)'),
   read(BandasAnterioresString),
   splitVS(BandasAnterioresString, ListaBandasAnteriores),
@@ -59,7 +61,6 @@ opcaoArtista('1') :-
   read(Funcoes),
   splitVS(Funcoes, ListaDeFuncoes),
   setArtista(Nome, BandaAtual, ListaBandasAnteriores, ListaDeFuncoes),
-  writeln('\nArtista adicionado com sucesso!\n'),
   sleep(2),
   buscarArtistaPorNome(Nome), !.
 opcaoArtista('1') :- writeln('\nEsse nome existe na lista de artistas cadastrados!\n'), sleep(2).
@@ -93,7 +94,8 @@ opcaoArtista('6') :-
   write(' - ID do artista'),
   read(Id),
   write(' - Nome do artista'),
-  read(Nome),
+  read(Input),
+  atom_string(Input, Nome),
   artistaValido(Id, Nome),
   removerBandaAtual(Id),
   writeln('\nBanda removida com sucesso!\n'),
@@ -106,10 +108,12 @@ opcaoArtista('7'):-
   write(' - ID do artista'),
   read(Id),
   write(' - Nome do artista'),
-  read(Nome),
+  read(Input),
+  atom_string(Input, Nome),
   artistaValido(Id, Nome),
   write(' - Nome da nova banda atual'),
-  read(NovaBandaAtual),
+  read(Input2),
+  atom_string(Input2, NovaBandaAtual),
   atualizarBandaAtual(Id, NovaBandaAtual),
   writeln('\nBanda atualizada com sucesso!\n'),
   sleep(2),
@@ -152,7 +156,7 @@ listToString([H|T], Resultado, Retorno):-
   atom_concat(Resultado, NovoElemento, NovoResultado),
   listToString(T, NovoResultado, Retorno).
 
-splitVS('0', []).
+splitVS('', []).
 splitVS(String, Retorno) :-
   split_string(String, ",", " ", Retorno).
 
