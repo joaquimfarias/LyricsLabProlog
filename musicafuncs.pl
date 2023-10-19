@@ -51,32 +51,42 @@ atualizaMusica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, Ba
 
 %Area filtros
 
-% - Melhores musicas artista, recebe o nome do artista e o top musicas(um inteiros que representa as n melhores musicas).
 
-
-mediaMusicasArtista(Artista, Media) :- 
+musicasPorArtista(Artista, Resultado) :- % Retorna todas as musicas que tem o artista passado como participante dela.
     todasAsMusicas(Musicas),
-    mediaArtista(Musicas, Artista, 0, Media).
+    recuperaMusicasComArtista(Artista, Musicas, Resultado).
 
-mediaArtista([musica(_,_,_,Participantes,_,_,_,_,_)], Artista, Resultado, Resultado):-
-    not(temEsseArtista(Participantes, Artista)).
-mediaArtista([musica(_, _, _, Participantes, _, _, _, _, _) | T], Artista, Soma, Media) :-
-    not(temEsseArtista(Participantes, Artista)),
-    mediaArtista(T, Artista, Soma, Media).
-mediaArtista([musica(_, _, _, Participantes, _, _, _, _, Avaliacao)], Artista, Soma, Media):- 
+recuperaMusicasComArtista(_, [], []).
+recuperaMusicasComArtista(Artista, [musica(Id,Nome,Instrumentos,Participantes,Ritmo,DataLancamento,Letra,NomeBanda,Avaliacao) | T], [musica(Id,Nome,Instrumentos,Participantes,Ritmo,DataLancamento,Letra,NomeBanda,Avaliacao) | Resultado]) :-
     temEsseArtista(Participantes, Artista),
-    Resultado is Soma + Avaliacao,
-    Media = Resultado.
-mediaArtista([musica(_, _, _, Participantes, _, _, _, _, Avaliacao) | T], Artista, Soma, Media) :-
-    temEsseArtista(Participantes, Artista),
-    Resultado is Soma + Avaliacao,
-    mediaArtista(T, Artista, Resultado, Media).
+    recuperaMusicasComArtista(Artista, T, Resultado).
+recuperaMusicasComArtista(Artista, [_|T], Resultado) :-
+    recuperaMusicasComArtista(Artista, T, Resultado).
+
+
+musicasPorBanda(Banda, Resultado) :- %Recupera Musicas que tem a mesma Banda.
+    todasAsMusicas(Musicas),
+    recuperaMusicasComBanda(Banda, Musicas, Resultado).
+
+
+recuperaMusicasComBanda(_, [], []).
+recuperaMusicasComBanda(Banda, [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | T], [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | Resultado]) :-
+    bandaEIgual(Banda, NomeBanda),
+    recuperaMusicasComBanda(Banda, T, Resultado).
+recuperaMusicasComBanda(Banda, [_ | T], Resultado) :-
+    recuperaMusicasComBanda(Banda, T, Resultado).
+
+
+bandaEIgual(Banda, Banda).
 
 temEsseArtista([Artista], Artista).
 temEsseArtista([Artista | _], Artista).
 temEsseArtista([_ | T], Artista):-
     temEsseArtista(T, Artista).
     
+
+
+
 
 
 
