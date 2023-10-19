@@ -3,12 +3,12 @@
 :-initialization(carregaMusicas).
 
 carregaMusicas :- 
-    consult('/home/CaioJhonatan/PLP/LyricsLabHaskellComProlog/LyricsLabProlog/musicas.pl').
+    consult('musicas.pl').
 
 %Area CRUD
 
 salvarMusicas :-
-    open('/home/CaioJhonatan/PLP/LyricsLabHaskellComProlog/LyricsLabProlog/musicas.pl', write, Stream),
+    open('musicas.pl', write, Stream),
     forall(musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao),
            format(Stream, 'musica(~q, ~q, ~q, ~q, ~q, ~q, ~q, ~q, ~q).~n', 
                   [Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao])),
