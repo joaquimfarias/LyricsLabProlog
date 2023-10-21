@@ -51,6 +51,10 @@ atualizaMusica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, Ba
 
 %Area filtros
 
+upperCase(String, Uppercase) :-
+  atom_string(Atom, String),
+  upcase_atom(Atom, Uppercase).
+
 
 musicasPorArtista(Artista, Resultado) :- % Retorna todas as musicas que tem o artista passado como participante dela.
     todasAsMusicas(Musicas),
@@ -58,7 +62,7 @@ musicasPorArtista(Artista, Resultado) :- % Retorna todas as musicas que tem o ar
     recuperaMusicasComArtista(ArtistaUper, Musicas, Resultado).
 
 recuperaMusicasComArtista(_, [], []).
-recuperaMusicasComArtista(Artista, [musica(Id,Nome,Instrumentos,Participantes,Ritmo,DataLancamento,Letra,NomeBanda,Avaliacao) | T], [musica(Id,Nome,Instrumentos,Participantes,Ritmo,DataLancamento,Letra,NomeBanda,Avaliacao) | Resultado]) :-
+recuperaMusicasComArtista(Artista, [musica(Id,Nome,Instrumentos,Participantes,Ritmo,DataLancamento,Letra,NomeBanda,Avaliacao) | T], [[Id,Nome,Instrumentos,Participantes,Ritmo,DataLancamento,Letra,NomeBanda,Avaliacao] | Resultado]) :-
     temEsseArtista(Participantes, Artista),
     recuperaMusicasComArtista(Artista, T, Resultado).
 recuperaMusicasComArtista(Artista, [_|T], Resultado) :-
