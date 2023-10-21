@@ -1,4 +1,4 @@
-:- consult('artistas.pl').
+:- consult('artistas.pl'), consult('musicafuncs.pl').
 :- dynamic (artista/4).
 
 lenArtistas(X) :-
@@ -123,3 +123,39 @@ naoContemArtista(NomeParaFiltrar):-
           NomeUpCase == NomeParaFiltrarUpCase),
           ArtistasFiltrados),
   length(ArtistasFiltrados, 0).
+
+artistaToString(Artista):-
+  nth0(0, Artista, Nome),
+  atom_concat(" - Nome: ", Nome, L1),
+  
+  nth0(1, Artista, BandaAtual),
+  atom_concat(" - Banda atual: ", BandaAtual, L2),
+  
+  nth0(2, Artista, BandasAnteriores),
+  listToString(BandasAnteriores, '', STRBandasAnteriores),
+  atom_concat(" - Bandas anteriores: ", STRBandasAnteriores, L3),
+  
+  nth0(3, Artista, Funcoes),
+  listToString(Funcoes, '', STRFuncoes),
+  atom_concat(" - Funcao na banda: ", STRFuncoes, L4),
+
+  musicasPorArtista(Nome, ListaDeMusicas),
+  length(ListaDeMusicas, Len),
+  mediaDasMusicas(ListaDeMusicas, Len, 0, Media),
+  atom_concat(" - Avaliacao: ", Media, L5),
+
+  writeln('\n*=*=*=*=*=*=*=*=*=*'),
+  writeln(L1),
+  writeln(L2),
+  writeln(L3),
+  writeln(L4),
+  writeln(L5),
+  writeln('*=*=*=*=*=*=*=*=*=*\n'),
+  sleep(0).
+
+mediaDasMusicas(_, 0, _, 0).
+mediaDasMusicas([], Len, Somatorio, Media):- Media is Somatorio/Len.
+mediaDasMusicas([H|T], Len, Somatorio, Media):- 
+  nth0(7, H, Avaliacao),
+  NovoSomatorio is Somatorio+Avaliacao,
+  mediaDasMusicas(T, Len, NovoSomatorio, Media).

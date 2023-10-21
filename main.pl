@@ -126,29 +126,6 @@ toScreen([], _, _):- writeln('\nNenhum artista para mostrar.\n'), sleep(3).
 toScreen([H|[]], Indice, Len):- write(Indice), artistaToString(H), Time is 2/Len, sleep(Time), !.
 toScreen([H|T], Indice, Len):- write(Indice), artistaToString(H), Time is 2/Len, sleep(Time), NovoIndice is Indice+1, toScreen(T, NovoIndice, Len).
 
-artistaToString(Artista):-
-  nth0(0, Artista, Nome),
-  atom_concat(" - Nome: ", Nome, L1),
-  
-  nth0(1, Artista, BandaAtual),
-  atom_concat(" - Banda atual: ", BandaAtual, L2),
-  
-  nth0(2, Artista, BandasAnteriores),
-  listToString(BandasAnteriores, '', STRBandasAnteriores),
-  atom_concat(" - Bandas anteriores: ", STRBandasAnteriores, L3),
-  
-  nth0(3, Artista, Funcoes),
-  listToString(Funcoes, '', STRFuncoes),
-  atom_concat(" - Funcao na banda: ", STRFuncoes, L4),
-
-  writeln('\n*=*=*=*=*=*=*=*=*=*'),
-  writeln(L1),
-  writeln(L2),
-  writeln(L3),
-  writeln(L4),
-  writeln('*=*=*=*=*=*=*=*=*=*\n'),
-  sleep(0).
-
 listToString([], Resultado, Resultado):- !.
 listToString([H|[]], Resultado, Retorno):- atom_concat(H, "", UltimoResultado), atom_concat(Resultado, UltimoResultado, Retorno), !.
 listToString([H|T], Resultado, Retorno):-

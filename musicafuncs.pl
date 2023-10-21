@@ -54,7 +54,8 @@ atualizaMusica(Id, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, Ba
 
 musicasPorArtista(Artista, Resultado) :- % Retorna todas as musicas que tem o artista passado como participante dela.
     todasAsMusicas(Musicas),
-    recuperaMusicasComArtista(Artista, Musicas, Resultado).
+    upperCase(Artista, ArtistaUper),
+    recuperaMusicasComArtista(ArtistaUper, Musicas, Resultado).
 
 recuperaMusicasComArtista(_, [], []).
 recuperaMusicasComArtista(Artista, [musica(Id,Nome,Instrumentos,Participantes,Ritmo,DataLancamento,Letra,NomeBanda,Avaliacao) | T], [musica(Id,Nome,Instrumentos,Participantes,Ritmo,DataLancamento,Letra,NomeBanda,Avaliacao) | Resultado]) :-
@@ -79,8 +80,8 @@ recuperaMusicasComBanda(Banda, [_ | T], Resultado) :-
 
 bandaEIgual(Banda, Banda).
 
-temEsseArtista([Artista], Artista).
-temEsseArtista([Artista | _], Artista).
+temEsseArtista([X], Y):- upperCase(X, UperX), UperX = Y.
+temEsseArtista([X | _], Y):- upperCase(X, UperX), UperX = Y.
 temEsseArtista([_ | T], Artista):-
     temEsseArtista(T, Artista).
     
