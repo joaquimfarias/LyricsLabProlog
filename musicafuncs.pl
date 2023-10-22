@@ -63,7 +63,7 @@ musicasPorArtista(Artista, Resultado) :- % Retorna todas as musicas que tem o ar
 
 recuperaMusicasComArtista(_, [], []).
 recuperaMusicasComArtista(Artista, [musica(Id,Nome,Instrumentos,Participantes,Ritmo,DataLancamento,Letra,NomeBanda,Avaliacao) | T], [[Id,Nome,Instrumentos,Participantes,Ritmo,DataLancamento,Letra,NomeBanda,Avaliacao] | Resultado]) :-
-    temEsseArtista(Participantes, Artista),
+    estaDentro(Participantes, Artista),
     recuperaMusicasComArtista(Artista, T, Resultado).
 recuperaMusicasComArtista(Artista, [_|T], Resultado) :-
     recuperaMusicasComArtista(Artista, T, Resultado).
@@ -76,24 +76,66 @@ musicasPorBanda(Banda, Resultado) :- %Recupera Musicas que tem a mesma Banda.
 
 recuperaMusicasComBanda(_, [], []).
 recuperaMusicasComBanda(Banda, [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | T], [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | Resultado]) :-
-    bandaEIgual(Banda, NomeBanda),
+    ehDoMesmoJeito(Banda, NomeBanda),
     recuperaMusicasComBanda(Banda, T, Resultado).
 recuperaMusicasComBanda(Banda, [_ | T], Resultado) :-
     recuperaMusicasComBanda(Banda, T, Resultado).
 
 
-bandaEIgual(Banda, Banda).
 
-temEsseArtista([X], Y):- upperCase(X, UperX), UperX = Y.
-temEsseArtista([X | _], Y):- upperCase(X, UperX), UperX = Y.
-temEsseArtista([_ | T], Artista):-
-    temEsseArtista(T, Artista).
     
 
+%Filtros de musica
+
+filtroMusicasPorTrecho(Trecho, Resultado) :- %Filtra musicas que tem coincidencia da letra com o trecho
+    todasAsMusicas(Musicas), 
+    filtroMusicasPorTrecho2(Trecho, Musicas, Resultado).
+
+filtroMusicasPorTrecho2(_, [], []).
+filtroMusicasPorTrecho2(Trecho, [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | T], [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | Resultado]) :-
+    temCoincidencia(Trecho  , Letra),
+    filtroMusicasPorTrecho2(Trecho, T, Resultado).
+filtroMusicasPorTrecho2(Trecho, [_| T], Resultado) :-
+    filtroMusicasPorTrecho2(Trecho, T, Resultado).
+
+
+filtroMusicasPorRitmo(Ritmo, Resultado) :- % Filtra musicas que tem o mesmo ritmo.
+    todasAsMusicas(Musicas),
+    filtroMusicasPorRitmo2(Ritmo, Musicas, Resultado).
+
+filtroMusicasPorRitmo2(_, [], []).
+filtroMusicasPorRitmo2(Ritmo2, [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | T], [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | Resultado]) :-
+    ehDoMesmoJeito(Ritmo2, Ritmo),
+    filtroMusicasPorRitmo2(Ritmo2, T, Resultado).
+filtroMusicasPorRitmo2(Ritmo, [_ | T], Resultado):-
+    filtroMusicasPorRitmo2(Ritmo, T, Resultado).
 
 
 
 
+filtrarMusicasInstrumento(Instrumento, Resultado) :- % Filtra musicas que tem o mesmo instrumento.
+    todasAsMusicas(Musicas),
+    upperCase(Instrumento, Aumentado),
+    filtrarMusicasInstrumento2(Aumentado, Musicas, Resultado).
+
+filtrarMusicasInstrumento2(_, [], []).
+filtrarMusicasInstrumento2(Instrumento,[musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | T], [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | Resultado]) :-
+    estaDentro(Instrumentos, Instrumento),
+    filtrarMusicasInstrumento2(Instrumento, T, Resultado).
+filtrarMusicasInstrumento2(Instrumento, [_ | T], Resultado):-
+    filtrarMusicasInstrumento2(Instrumento, T, Resultado).
+
+
+filtroMusicasPorNome(Nome, Resultado) :- % Filtra musicas que tem coincidencia nome.
+    todasAsMusicas(Musicas),
+    filtroMusicasPorNome2(Nome, Musicas, Resultado).
+
+filtroMusicasPorNome2(_, [], []).
+filtroMusicasPorNome2(Nome2, [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | T], [musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | Resultado]) :-
+    temCoincidencia(Nome2, Nome),
+    filtroMusicasPorNome2(Nome2, T, Resultado).
+filtroMusicasPorNome2(Nome2, [_ | T], Resultado):-
+    filtroMusicasPorNome2(Nome2, T, Resultado).
 
 
 %Micelaneas.
@@ -107,3 +149,34 @@ todasAsMusicas(Musicas) :-
     findall(musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao),
             musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao),
             Musicas).
+
+%Funcoes Auxiliares.
+
+temCoincidencia(String1, String2) :- %Verifica se a primeira string esta contida na segunda.
+    upperCase(String1, String11),
+    upperCase(String2, String22),
+    atom_chars(String11, String1Formatada),
+    atom_chars(String22, String2Formatada),
+    temCoincidencia2(String1Formatada, String2Formatada, String1Formatada).
+
+temCoincidencia2([], _, _). 
+
+temCoincidencia2([_ | _], [_ | T2], Clone) :-
+    temCoincidencia2(Clone, T2, Clone).
+
+temCoincidencia2([H | T], [H | T2], Clone) :-
+    temCoincidencia2(T, T2, Clone).
+
+
+ehDoMesmoJeito(String1, String2) :-
+    upperCase(String1, R1),
+    upperCase(String2, R2),
+    ehIgual(R1, R2).
+
+ehIgual(String, String).
+
+
+estaDentro([X], Y):- upperCase(X, UperX), UperX = Y.
+estaDentro([X | _], Y):- upperCase(X, UperX), UperX = Y.
+estaDentro([_ | T], Y):-
+    estaDentro(T, Y).
