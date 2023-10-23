@@ -1,4 +1,4 @@
-:- consult('artistas.pl'), consult('musicafuncs.pl').
+:- consult('artistas.pl'), consult('musicafuncs.pl'), consult('util.pl').
 :- dynamic (artista/4).
 
 lenArtistas(X) :-
@@ -15,7 +15,7 @@ buscarArtistaPorNome(NomeParaFiltrar) :-
           NomeUpCase == NomeParaFiltrarUpCase),
           ArtistasFiltrados),
           length(ArtistasFiltrados, Len),
-  toScreen(ArtistasFiltrados, 1, Len).
+  artistaToScreen(ArtistasFiltrados, 1, Len).
 
 buscarArtistasPorBandaAtual(BandaParaFiltrar) :-
   upcase_atom(BandaParaFiltrar, BandaParaFiltrarUpCase),
@@ -25,14 +25,14 @@ buscarArtistasPorBandaAtual(BandaParaFiltrar) :-
           BandaParaFiltrarUpCase == BandaAtualUpCase),
           ArtistasFiltrados),
   length(ArtistasFiltrados, Len),
-  toScreen(ArtistasFiltrados, 1, Len).
+  artistaToScreen(ArtistasFiltrados, 1, Len).
 
 buscarArtistasPorBandaAnterior('') :-
   findall([Nome, BandaAtual, [], Funcoes, _],
           artista(Nome, BandaAtual, [], Funcoes, _),
           ArtistasFiltrados),
           length(ArtistasFiltrados, Len),
-  toScreen(ArtistasFiltrados, 1, Len).
+  artistaToScreen(ArtistasFiltrados, 1, Len).
 buscarArtistasPorBandaAnterior(BandaAnteriorParaFiltrar) :-
   BandaAnteriorParaFiltrar \= '',
   findall([Nome, BandaAtual, BandasAnteriores, Funcoes, _],
@@ -41,7 +41,7 @@ buscarArtistasPorBandaAnterior(BandaAnteriorParaFiltrar) :-
           contem(BandaAnteriorParaFiltrarUpCase, BandasAnteriores)),
           ArtistasFiltrados),
   length(ArtistasFiltrados, Len),
-  toScreen(ArtistasFiltrados, 1, Len).
+  artistaToScreen(ArtistasFiltrados, 1, Len).
 
 buscarArtistasPorFuncao(FuncoesParaFiltrar) :-
   upcase_atom(FuncoesParaFiltrar, FuncoesParaFiltrarUpCase),
@@ -50,7 +50,7 @@ buscarArtistasPorFuncao(FuncoesParaFiltrar) :-
           contem(FuncoesParaFiltrarUpCase, Funcoes)),
           ArtistasFiltrados),
           length(ArtistasFiltrados, Len),
-  toScreen(ArtistasFiltrados, 1, Len).
+  artistaToScreen(ArtistasFiltrados, 1, Len).
 
 setArtista(Nome, BandaAtual, ListaBandasAnteriores, Funcoes):-
   open('artistas.pl', append, Stream),
@@ -107,10 +107,6 @@ atualizarBandaAtual(Id, NovaBandaAtual):-
   close(Stream),
   !.
 
-upperCase(String, Uppercase) :-
-  atom_string(Atom, String),
-  upcase_atom(Atom, Uppercase).
-
 contem(_, []):- false.
 contem(Alvo, [H|_]):- upperCase(Alvo, AlvoUpper), upperCase(H, UpperH), AlvoUpper == UpperH.
 contem(Alvo, [_|T]):- contem(Alvo, T). 
@@ -156,6 +152,6 @@ artistaToString(Artista):-
 mediaDasMusicas(_, 0, _, 0).
 mediaDasMusicas([], Len, Somatorio, Media):- Media is Somatorio/Len.
 mediaDasMusicas([H|T], Len, Somatorio, Media):- 
-  nth0(7, H, Avaliacao),
+  nth0(8, H, Avaliacao),
   NovoSomatorio is Somatorio+Avaliacao,
   mediaDasMusicas(T, Len, NovoSomatorio, Media).

@@ -126,22 +126,6 @@ opcaoArtista('7'):-
 opcaoArtista('0') :- lyricsLab.
 opcaoArtista(_):- writeln('Opcao invalida'), sleep(2), menu2('1').
 
-toScreen([], _, _):- writeln('\nNenhum artista para mostrar.\n'), sleep(3).
-toScreen([H|[]], Indice, Len):- write(Indice), artistaToString(H), Time is 2/Len, sleep(Time), !.
-toScreen([H|T], Indice, Len):- write(Indice), artistaToString(H), Time is 2/Len, sleep(Time), NovoIndice is Indice+1, toScreen(T, NovoIndice, Len).
-
-listToString([], Resultado, Resultado):- !.
-listToString([H|[]], Resultado, Retorno):- atom_concat(H, "", UltimoResultado), atom_concat(Resultado, UltimoResultado, Retorno), !.
-listToString([H|T], Resultado, Retorno):-
-  atom_concat(H, " | ", NovoElemento),
-  atom_concat(Resultado, NovoElemento, NovoResultado),
-  listToString(T, NovoResultado, Retorno).
-
-splitVS('', []).
-splitVS(String, Retorno) :-
-  split_string(String, ",", " ", Retorno).
-
-
 %AREA MUSICAS.
 
 opacaoMusica(_):- writeln("Opcao invalida").
