@@ -34,6 +34,10 @@ menu2('3') :-
   writeln('\n================='),
   writeln('1. Adicionar uma nova musica'),
   writeln('2. Buscar Musica por Id.'),
+  writeln('3. Buscar musicas por trecho.'),
+  writeln('4. Buscar musicas por ritmo. '),
+  writeln('5. Buscar musicas por instrumentos.'),
+  writeln('6. Buscar musicas por nome'),
   writeln('0. Voltar'),
   writeln('=================\n'),
   read(Opcao),
@@ -139,17 +143,20 @@ splitVS(String, Retorno) :-
 
 
 %AREA MUSICAS.
+
 opacaoMusica(_):- writeln("Opcao invalida").
+
+opacaoMusica('0').
 
 opcaoMusica('1'):- %Menu musica
   writeln('\n================='),
   writeln("Digite o nome da musica"),
   read(Nome),
   writeln('\n================='),
-  writeln('Digite os instrumentos (Separados por espaco)'),
+  writeln('Digite os instrumentos (Separados por virgula)'),
   read(Instrumentos),
   writeln('\n================='),
-  writeln('Digite os participantes (Separados por espaco)'),
+  writeln('Digite os participantes (Separados por virgula)'),
   read(Participantes),
   writeln('\n================='),
   writeln('Digite o ritmo'),
@@ -166,8 +173,8 @@ opcaoMusica('1'):- %Menu musica
   writeln('\n================='),
   write('Digite a avaliacao dela'),
   read(Avaliacao),
-  split_string(Instrumentos, ' ', ' ', InstrumentoSplitado),
-  split_string(Participantes, ' ', ' ', ParticipantesSplitado),
+  split_string(Instrumentos, ',', ',', InstrumentoSplitado),
+  split_string(Participantes, ',', ',', ParticipantesSplitado),
   adicionaMusica(Nome, InstrumentoSplitado, ParticipantesSplitado, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao).
 
 opcaoMusica('2'):-
@@ -175,5 +182,37 @@ opcaoMusica('2'):-
   writeln('Digite o Id da musica'),
   read(Id),
   selecionaMusica(Id, Resultado),
-  writeln(Resultado),
+  exibirMusica(Resultado),
+  sleep(5).
+
+opcaoMusica('3') :-
+  writeln('\n================='),
+  writeln('Digite o trecho da musica'),
+  read(Trecho),
+  filtroMusicasPorTrecho(Trecho, Resultado),
+  exibirMusicas(Resultado),
+  sleep(5).
+
+opcaoMusica('4') :-
+  writeln('\n================='),
+  writeln('Digite o ritmo'),
+  read(Ritmo),
+  filtroMusicasPorRitmo(Ritmo, Resultado),
+  exibirMusicas(Resultado),
+  sleep(5).
+
+opcaoMusica('5') :-
+  writeln('\n================='),
+  writeln('Digite o Instrumento'),
+  read(Instrumento),
+  filtrarMusicasInstrumento(Instrumento, Resultado),
+  exibirMusicas(Resultado),
+  sleep(5).
+
+opcaoMusica('6') :-
+  writeln('\n================='),
+  writeln('Digite o nome'),
+  read(Nome),
+  filtroMusicasPorNome(Nome, Resultado),
+  exibirMusicas(Resultado),
   sleep(5).

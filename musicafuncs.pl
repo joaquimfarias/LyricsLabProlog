@@ -150,6 +150,7 @@ todasAsMusicas(Musicas) :-
             musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao),
             Musicas).
 
+
 %Funcoes Auxiliares.
 
 temCoincidencia(String1, String2) :- %Verifica se a primeira string esta contida na segunda.
@@ -180,3 +181,34 @@ estaDentro([X], Y):- upperCase(X, UperX), UperX = Y.
 estaDentro([X | _], Y):- upperCase(X, UperX), UperX = Y.
 estaDentro([_ | T], Y):-
     estaDentro(T, Y).
+
+ln :- write('\n').
+
+exibirMusica(musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao)) :- %Exibicao de musicas
+    writeln("============================"),
+    write("Id: "), write(Id),
+    ln,
+    write("Nome: "), write(Nome),
+    ln,
+    write("Instrumentos: "), write(Instrumentos),
+    ln,
+    write("Participantes: "), write(Participantes),
+    ln,
+    write("Ritmo: "), write(Ritmo),
+    ln,
+    write("Data de lancamento: "), write(DataLancamento),
+    ln,
+    write("Letra: "), write(Letra),
+    ln,
+    write("Nome da banda: "), write(NomeBanda),
+    ln,
+    write("Avaliacao: "), write(Avaliacao),
+    ln,
+    writeln("============================").
+
+
+exibirMusicas([]). %Exibicao de varias musicas.
+exibirMusicas([H | T]) :-
+    exibirMusica(H),
+    exibirMusicas(T).
+    
