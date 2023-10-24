@@ -7,6 +7,20 @@ lenArtistas(X) :-
           TodosOsArtistas),
   length(TodosOsArtistas, X).
 
+getAllArtistas(TodosOsArtistas) :-
+  findall([Nome, BandaAtual, BandasAnteriores, Funcoes, Id],
+          artista(Nome, BandaAtual, BandasAnteriores, Funcoes, Id),
+          Lista),
+          avaliacaoAppend(Lista, [], TodosOsArtistas).
+
+avaliacaoAppend([], Temp, Temp).
+avaliacaoAppend([H|T], Temp, Retorno):-
+  nth0(0, H, Nome),
+  mediaArtista(Nome, Media),
+  append(H, [Media], NovoH),
+  append(Temp, [NovoH], NovoTemp),
+  avaliacaoAppend(T, NovoTemp, Retorno).
+
 buscarArtistaPorNome(NomeParaFiltrar) :-
   upcase_atom(NomeParaFiltrar, NomeParaFiltrarUpCase),
   findall([Nome, BandaAtual, BandasAnteriores, Funcoes, _],
@@ -135,19 +149,25 @@ artistaToString(Artista):-
   listToString(Funcoes, '', STRFuncoes),
   atom_concat(" - Funcao na banda: ", STRFuncoes, L4),
 
-  musicasPorArtista(Nome, ListaDeMusicas),
-  length(ListaDeMusicas, Len),
-  mediaDasMusicas(ListaDeMusicas, Len, 0, Media),
-  atom_concat(" - Avaliacao: ", Media, L5),
+  mediaArtista(Nome, Media),
 
   writeln('\n*=*=*=*=*=*=*=*=*=*'),
   writeln(L1),
   writeln(L2),
   writeln(L3),
   writeln(L4),
-  writeln(L5),
+  format(' - Avaliacao ~2f \n', Media),
   writeln('*=*=*=*=*=*=*=*=*=*\n'),
   sleep(0).
+
+artistaToScreen([], _, _):- writeln('\nNenhum artista para mostrar.\n'), sleep(3).
+artistaToScreen([H|[]], Indice, Len):- write(Indice), artistaToString(H), Time is 2/Len, sleep(Time), !.
+artistaToScreen([H|T], Indice, Len):- write(Indice), artistaToString(H), Time is 2/Len, sleep(Time), NovoIndice is Indice+1, artistaToScreen(T, NovoIndice, Len).
+
+mediaArtista(Nome, Media) :-
+  musicasPorArtista(Nome, ListaDeMusicas),
+  length(ListaDeMusicas, Len),
+  mediaDasMusicas(ListaDeMusicas, Len, 0, Media).
 
 mediaDasMusicas(_, 0, _, 0).
 mediaDasMusicas([], Len, Somatorio, Media):- Media is Somatorio/Len.
