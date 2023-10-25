@@ -3,8 +3,6 @@
 :-initialization(carregaMusicas).
 
 
-
-
 carregaMusicas :- 
     consult('musicas.pl'), consult('util.pl').
 
@@ -244,5 +242,61 @@ removeDeUmaLista(Elemento, [Elemento | T], Resultado) :-
 
 
 %DashBoard
+
+
+test :-
+    nMelhoresMusicas(5, Resultado),
+    printarGrafico(Resultado).
+
+printarGrafico([]). 
+printarGrafico([musica(Id, Nome, _, _, _, _, _, _, Avaliacao) | T]) :-
+
+    write('___________________________________'),ln,
+    printarNBarrasRetas(Avaliacao, Barras),
+    tranformaEmUmaUnicaString(Id, Nome, String),
+    format('~q ~q', [String, Barras]),ln,
+    printarGrafico2(T).
+
+
+printarGrafico2([]) :- write('___________________________________').
+printarGrafico2([musica(Id, Nome, _, _, _, _, _, _, Avaliacao) | T]) :-
+    printarNBarrasRetas(Avaliacao, Barras),
+    tranformaEmUmaUnicaString(Id, Nome, String),
+    format('~q ~q', [String, Barras]),ln,
+    printarGrafico2(T).
+    
+
+
+%Funcoes Auxiliares
+
+printarNBarrasRetas(N, Resultado) :-
+    printarNBarrasRetas2(N, Barras),
+    string_chars(Resultado, Barras).
+
+printarNBarrasRetas2(0, []).
+printarNBarrasRetas2(N, ['|' | T]) :-
+    NovoN is N - 1,
+    printarNBarrasRetas2(NovoN, T).
+
+
+tranformaEmUmaUnicaString(String1, String2, Resultado) :-
+    concat(String1, ' - ', String1form),
+    concat(String1form, String2, TrabN),
+    atom_chars(TrabN, Stringform),
+    reduzString(Stringform, 15, Resposta),
+    string_chars(Resultado,Resposta).
+
+
+
+reduzString(_, 0, []).
+reduzString([], N, [' ' | T]) :-
+    NovoN is N - 1,
+    reduzString([], NovoN, T).
+reduzString([H | T1], N, [H | T2]) :-
+    NovoN is N - 1,
+    reduzString(T1, NovoN, T2).
+    
+    
+
 
 

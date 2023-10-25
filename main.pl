@@ -229,5 +229,13 @@ opcaoDashBoard('4') :-
 opcaoDashBoard('D') :-
   dadosGerais().
 
+opcaoDashBoard('2') :-
+  writeln('\n================='),
+  writeln('Informe quantas musicas vao aparecer no Top'),
+  read(Total),
+  nMelhoresMusicas(Total, Resultado),
+  printarGrafico(Resultado),
+  sleep(5).
+
 opcaoDashBoard('0') :- lyricsLab.
 opcaoDashBoard(_) :- writeln('Opcao invalida'), sleep(2), menu2('4').
