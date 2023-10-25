@@ -1,14 +1,14 @@
-:- consult('artistasRepo.pl'), consult('artistas.pl'), consult('musicafuncs.pl').
+:- consult('artistasRepo.pl'), consult('artistas.pl'), consult('musicafuncs.pl'), consult('util.pl'), consult('dashBoard.pl').
 :- dynamic (artista/5).
 :- use_module(library(http/json)).
 :- initialization(lyricsLab).
-
 
 lyricsLab :-
   writeln('\n================='),
   writeln('1. Artistas'),
   writeln('2. Bandas'),
   writeln('3. Musicas'),
+  writeln('4. DashBoard'),
   writeln('0. Sair'),
   writeln('=================\n'),
   read(Opcao),
@@ -43,6 +43,20 @@ menu2('3') :-
   read(Opcao),
   upperCase(Opcao, OpcaoGrande),
   opcaoMusica(OpcaoGrande).
+menu2('4') :-
+  writeln('\n================='),
+  writeln('*. Resumo geral'),
+  writeln('1. Top N melhores artistas'),
+  writeln('2. Top N melhores musicas'),
+  writeln('3. Top N melhores bandas'),
+  writeln('4. Sugestao aleatoria de artista'),
+  writeln('5. Sugestao aleatoria de musica'),
+  writeln('6. Sugestao aleatoria de banda'),
+  writeln('0. Voltar'),
+  writeln('\n================='),
+  read(Opcao),
+  upperCase(Opcao, OpcaoUpper),
+  opcaoDashBoard(OpcaoUpper).
 
 menu2('0') :- halt.
 menu2(_) :- writeln('Opcao invalida'), sleep(2).
@@ -126,22 +140,6 @@ opcaoArtista('7'):-
 opcaoArtista('0') :- lyricsLab.
 opcaoArtista(_):- writeln('Opcao invalida'), sleep(2), menu2('1').
 
-toScreen([], _, _):- writeln('\nNenhum artista para mostrar.\n'), sleep(3).
-toScreen([H|[]], Indice, Len):- write(Indice), artistaToString(H), Time is 2/Len, sleep(Time), !.
-toScreen([H|T], Indice, Len):- write(Indice), artistaToString(H), Time is 2/Len, sleep(Time), NovoIndice is Indice+1, toScreen(T, NovoIndice, Len).
-
-listToString([], Resultado, Resultado):- !.
-listToString([H|[]], Resultado, Retorno):- atom_concat(H, "", UltimoResultado), atom_concat(Resultado, UltimoResultado, Retorno), !.
-listToString([H|T], Resultado, Retorno):-
-  atom_concat(H, " | ", NovoElemento),
-  atom_concat(Resultado, NovoElemento, NovoResultado),
-  listToString(T, NovoResultado, Retorno).
-
-splitVS('', []).
-splitVS(String, Retorno) :-
-  split_string(String, ",", " ", Retorno).
-
-
 %AREA MUSICAS.
 
 opacaoMusica(_):- writeln("Opcao invalida").
@@ -216,3 +214,13 @@ opcaoMusica('6') :-
   filtroMusicasPorNome(Nome, Resultado),
   exibirMusicas(Resultado),
   sleep(5).
+
+% Área DashBoard
+opcaoDashBoard('1') :-
+  writeln('\n================='),
+  writeln('Informe quantos artistas vao aparecer no TOP'),
+  read(Total),
+  topNArtistas(Total).
+
+opcaoDashBoard('0') :- lyricsLab.
+opcaoDashBoard(_) :- writeln('Opcao invalida'), sleep(2), menu2('4').
