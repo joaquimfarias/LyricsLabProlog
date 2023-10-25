@@ -8,17 +8,15 @@ topNArtistas(N) :-
   Minimo is min(N, Len),
   dashBoartArtistaToScreen(ArtistasOrdenados, 1, Minimo),!.
 
-dashBoartArtistaToScreen([], _, _):- writeln('entrou 3'), !.
+dashBoartArtistaToScreen([], _, _):- !.
 dashBoartArtistaToScreen(_, Indice, Limite):-
-  Indice > Limite, writeln('entrou 2'), !.
+  Indice > Limite, !.
 dashBoartArtistaToScreen([H|T], Indice, Limite):-
-  Indice <= Limite,
-  write(Indice), write(" e "), writeln(Limite),
+  Indice =< Limite,
   dashBoartArtistaToString(H, Indice),
   Time is 2/Limite, sleep(Time),
   NovoIndice is Indice + 1,
-  writeln(NovoIndice),
-  dashBoartArtistaToScreen(T, NovoIndice, Limite).
+  dashBoartArtistaToScreen(T, NovoIndice, Limite), !.
 
 dashBoartArtistaToString(Artista, Indice):-
   write('\n'), write(Indice), writeln(' Lugar'),

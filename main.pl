@@ -221,6 +221,11 @@ opcaoDashBoard('1') :-
   writeln('Informe quantos artistas vao aparecer no TOP'),
   read(Total),
   topNArtistas(Total).
+opcaoDashBoard('4') :-
+  writeln('\n================='),
+  lenArtistas(Len),
+  random(1, Len, IdAleatorio),
+  buscarArtistaPorId(IdAleatorio).
 
 opcaoDashBoard('2') :-
   writeln('\n================='),
