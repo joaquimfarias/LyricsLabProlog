@@ -21,6 +21,10 @@ avaliacaoAppend([H|T], Temp, Retorno):-
   append(Temp, [NovoH], NovoTemp),
   avaliacaoAppend(T, NovoTemp, Retorno).
 
+buscarArtistaPorId(Id):-
+  artista(Nome, BandaAtual, BandasAnteriores, Funcoes, Id),
+  artistaToScreen([[Nome, BandaAtual, BandasAnteriores, Funcoes]], 1, 1).
+
 buscarArtistaPorNome(NomeParaFiltrar) :-
   upcase_atom(NomeParaFiltrar, NomeParaFiltrarUpCase),
   findall([Nome, BandaAtual, BandasAnteriores, Funcoes, _],
