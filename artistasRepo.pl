@@ -11,7 +11,7 @@ getAllArtistas(TodosOsArtistas) :-
   findall([Nome, BandaAtual, BandasAnteriores, Funcoes, Id],
           artista(Nome, BandaAtual, BandasAnteriores, Funcoes, Id),
           Lista),
-          avaliacaoAppend(Lista, [], TodosOsArtistas).
+          avaliacaoAppend(Lista, [], TodosOsArtistas), !.
 
 avaliacaoAppend([], Temp, Temp).
 avaliacaoAppend([H|T], Temp, Retorno):-
