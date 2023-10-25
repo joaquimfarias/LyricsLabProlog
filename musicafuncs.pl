@@ -2,6 +2,9 @@
 :-dynamic(musica/9).
 :-initialization(carregaMusicas).
 
+
+
+
 carregaMusicas :- 
     consult('musicas.pl'), consult('util.pl').
 
@@ -133,6 +136,30 @@ filtroMusicasPorNome2(Nome2, [_ | T], Resultado):-
     filtroMusicasPorNome2(Nome2, T, Resultado).
 
 
+%TopMusicas para o dashBoard
+
+
+maiorAvaliacao([musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao)], musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao)).
+maiorAvaliacao([musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) | T], Resultado ) :-
+    maiorAvaliacao(T, musica(Id2, Nome2, Instrumentos2, Participantes2, Ritmo2, DataLancamento2, Letra2, NomeBanda2, Avaliacao2)),
+    (Avaliacao > Avaliacao2 -> Resultado = musica(Id, Nome, Instrumentos, Participantes, Ritmo, DataLancamento, Letra, NomeBanda, Avaliacao) ;  Resultado = musica(Id2, Nome2, Instrumentos2, Participantes2, Ritmo2, DataLancamento2, Letra2, NomeBanda2, Avaliacao2)).
+
+
+
+
+nMelhoresMusicas(N, Resultado) :-
+    todasAsMusicas(Musicas),
+    nMelhoresMusicas2(N, Musicas, Resultado).
+
+
+nMelhoresMusicas2(0, _, []).
+nMelhoresMusicas2(N, Musicas, [H1 | Resto]) :-
+    maiorAvaliacao(Musicas, H1),
+    NovoN is N - 1,
+    removeDeUmaLista(H1, Musicas, NovaMusicas),
+    nMelhoresMusicas2(NovoN, NovaMusicas, Resto).
+
+
 %Micelaneas.
 
 printarMusicas :-
@@ -206,4 +233,16 @@ exibirMusicas([]). %Exibicao de varias musicas.
 exibirMusicas([H | T]) :-
     exibirMusica(H),
     exibirMusicas(T).
+
     
+removeDeUmaLista(_, [], []).
+removeDeUmaLista(Elemento, [H | T], [H | Resultado]) :-
+    Elemento \= H,
+    removeDeUmaLista(Elemento, T, Resultado).
+removeDeUmaLista(Elemento, [Elemento | T], Resultado) :-
+    removeDeUmaLista(Elemento, T, Resultado).
+
+
+%DashBoard
+
+
