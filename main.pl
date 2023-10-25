@@ -212,7 +212,7 @@ opcaoMusica('5') :-
 opcaoMusica('6') :-
   writeln('\n================='),
   writeln('Digite o nome'),
-  read(Nome),
+  read(Nome), 
   filtroMusicasPorNome(Nome, Resultado),
   exibirMusicas(Resultado),
   sleep(5).
