@@ -33,3 +33,27 @@ dashBoartArtistaToString(Artista, Indice):-
   write(Nome), write(' com '), format('~2f', Avaliacao), writeln(' de avaliacao'),
   write(NomeMusica), write(' e a melhor musica do artista com '), write(AvaliacaoMusica), writeln(' de avaliacao'),
   writeln('#=#=#=#=#=#=#=#=#=#').
+
+dadosGerais() :-
+  getAllArtistas(TodosOsArtistas),
+  length(TodosOsArtistas, TotalDeArtistas),
+  append([], [TotalDeArtistas], L1),
+  contarFuncoes(TodosOsArtistas, [], TotalDeFuncoes),
+  append(L1, [TotalDeFuncoes], L2),
+  contarArtistasSolo(TotalArtistasSolo),
+  append(L2, [TotalArtistasSolo], L3).
+
+
+contarFuncoes([], Temp, Total):- length(Temp, Total).
+contarFuncoes([H|T], Temp, Total):-
+  nth0(3, H, Funcoes),
+  inserirDistintos(Funcoes, Temp, NovaTemp),
+  contarFuncoes(T, NovaTemp, Total).
+
+contarArtistasSolo(Total):-
+  findall([Id],
+          (artista(_, BandaAtual, _, _, Id),
+          upperCase(BandaAtual, BandaAtualUpCase),
+          BandaAtualUpCase = 'SOLO'),
+          ArtistasSolo),
+  length(ArtistasSolo, Total).

@@ -62,7 +62,7 @@ menu2('3') :-
   opcaoMusica(OpcaoGrande).
 menu2('4') :-
   writeln('\n================='),
-  writeln('*. Resumo geral'),
+  writeln('D. Resumo geral'),
   writeln('1. Top N melhores artistas'),
   writeln('2. Top N melhores musicas'),
   writeln('3. Top N melhores bandas'),
@@ -243,6 +243,8 @@ opcaoDashBoard('4') :-
   lenArtistas(Len),
   random(1, Len, IdAleatorio),
   buscarArtistaPorId(IdAleatorio).
+opcaoDashBoard('D') :-
+  dadosGerais().
 
 opcaoDashBoard('2') :-
   writeln('\n================='),

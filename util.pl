@@ -60,3 +60,14 @@ inserirMusicaOrdenado(Alvo, [H|T], Temp, Resultado):-
   append(X, [H|T], Resultado).
 inserirMusicaOrdenado(Alvo, [], Temp, Resultado):-
   append(Temp, [Alvo], Resultado).
+
+inserirDistintos([], Temp, Temp).
+inserirDistintos([F|Ft], Temp, Resultado):-
+  naoContem(Temp, F),
+  append(Temp, [F], NovoTemp),
+  inserirDistintos(Ft, NovoTemp, Resultado).
+inserirDistintos([_|Ft], Temp, Resultado):- inserirDistintos(Ft, Temp, Resultado).
+
+naoContem([], _):- !.
+naoContem([H|T], Alvo):-
+  H \= Alvo, naoContem(T, Alvo).
