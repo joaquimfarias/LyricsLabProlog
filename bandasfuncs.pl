@@ -58,15 +58,20 @@ adicionar_integrante(_, _) :-
 
 % Predicado para remover um integrante de uma banda
 remover_integrante(Integrante, NomeBanda) :-
-    banda(Banda), % Verificar se a banda existe na base de conhecimento.
-    nome(Banda, NomeBanda), % Verificar se o nome da banda corresponde ao fornecido.
+    banda(Banda),
+    nome(Banda, NomeBanda),
     composicao_atual(Banda, IntegrantesAtuais),
+    member(Integrante, IntegrantesAtuais), % Verifica se o integrante está na lista atual
     delete(IntegrantesAtuais, Integrante, NovosIntegrantes),
-    retract(banda(Banda)), % Remover a versão anterior da banda da base de conhecimento.
-    assertz(banda(banda(NomeBanda, Compositores, NovosIntegrantes, Musicas, Instrumentos, DataFundacao, Genero))),
-    writeln('Integrante removido com sucesso da banda.').
+    artistas_anteriores(Banda, IntegrantesAntigos),
+    append([Integrante], IntegrantesAntigos, NovosIntegrantesAntigos), % Adiciona o integrante à lista de antigos
+    retract(banda(Banda)),
+    assertz(banda(banda(NomeBanda, Compositores, NovosIntegrantes, Musicas, Instrumentos, DataFundacao, Genero, NovosIntegrantesAntigos))),
+    writeln('Integrante movido para a lista de antigos integrantes com sucesso.').
+
 remover_integrante(_, _) :-
     writeln('Banda não encontrada ou integrante não removido.').
+
 
 % Predicado para remover uma banda
 remover_banda(NomeBanda) :-
@@ -93,3 +98,16 @@ filtrar_bandas_por_genero(Genero, BandasFiltradas) :-
 filtrar_bandas_por_artista(Artista, BandasFiltradas) :-
     findall(B, (banda(B), (composicao_atual(B, IntegrantesAtual); artistas_anteriores(B, IntegrantesAnteriores)),
         member(Artista, IntegrantesAtual); member(Artista, IntegrantesAnteriores)), BandasFiltradas).
+
+
+% Predicado para buscar uma banda pelo nome
+buscar_banda_por_nome(NomeBanda, Banda) :-
+    banda(NomeBanda, Membros, ArtistasAnteriores, Musicas, Instrumentos, DataFundacao, Genero, Avaliacao),
+    Banda = [NomeBanda, Membros, ArtistasAnteriores, Musicas, Instrumentos, DataFundacao, Genero, Avaliacao].
+
+% Predicado para buscar bandas por membro antigo
+buscar_bandas_por_membro_antigo(NomeMembroAntigo, BandasEncontradas) :-
+    findall(Banda, (banda(Banda), artistas_anteriores(Banda, MembrosAntigos), member(NomeMembroAntigo, MembrosAntigos)), BandasEncontradas).
+
+
+
